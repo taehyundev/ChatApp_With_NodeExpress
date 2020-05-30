@@ -2,10 +2,6 @@ var express = require('express')
 var router = express.Router()
 
 router.get('/', (req,res)=>{
-    res.render('test_socket.ejs')
+    res.render('index_test.ejs')
 })
-io.on('connection', (socket) => {
-    console.log('a user connected');
-  });
-
 module.exports = router

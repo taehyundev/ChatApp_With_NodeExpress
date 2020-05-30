@@ -11,6 +11,8 @@
 
 ### 참고 사이트
 >> https://socket.io/get-started/chat/
+>> https://github.com/TSalu/Socket.io-Chat-App/
+>> https://www.youtube.com/watch?v=tHbCkikFfDE
 
 ### What is the meaning of the event?
 이벤트는 웹 소켓을 사용하는 '단위'라고 생각하면 된다. 클러이언트와 서버에서 이벤트 단위로 각 작업을 매칭하게 된다.
