@@ -1,11 +1,14 @@
-var express = require('express')
+var express = require('express');
+var path = require("path")
+var chat = require('./chat/chat')
 var router = express.Router()
-var test_socket = require('./test/socket_ex')
 
-router.get('/', (req,res)=>{
-    res.render('index.ejs')
+router.use(express.static('public'))
+
+router.get('/',(req,res)=>{
+    res.sendFile(path.join(__dirname, "../public/index.html"));
 })
 
-router.use('/test', test_socket)
+router.get('/chat',chat );
 
 module.exports =router

@@ -1,32 +1,26 @@
-var express = require('express')
-var app = express()
-var server = require('http').createServer(app)
-var io = require('socket.io').listen(server)
-var router = require('./routes/index')
+var express =require('express')
+var app = require('express')();
 
-server.listen(process.env.PORT || 3000)
-console.log("Server Running..")
-
-
-users = []
-connections = []
-
-//정적요소 사용
-app.use(express.static('public'))
-// ejs use
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
+var routes = require('./routes/index');
+//ejs set
 app.set('view engine','ejs')
-
-
-io.sockets.on('connection', (socket)=>{
-    connections.push(socket);
-    console.log('Connected: %s sockets connected', connections.length)
-
-
-    socket.on('disconnect',(data)=>{
-        console.log(data)
-        connections.splice(connections.indexOf(socket),1)
-        console.log('Disconnected: %s sockets connected', connections.length)
+app.use(express.static(__dirname+'/public'))
+//post get 요청시 routes에서 처리
+app.use(routes)
+io.on('connection', (socket) => {
+    console.log("connect,user")
+    socket.on('disconnect', ()=>{
+        console.log("disconnect, user")
     })
-})
+    
+    socket.on('chat message', (msg) => {
+        console.log('message: '+ msg);
+        io.emit('chat message', msg);
+    });
+});
 
-app.use(router)
+http.listen(3000, () => {
+  console.log('listening on *:3000');
+});
