@@ -11,13 +11,14 @@ app.use(express.static(__dirname+'/public'))
 app.use(routes)
 io.on('connection', (socket) => {
     console.log("connect,user")
+    
     socket.on('disconnect', ()=>{
         console.log("disconnect, user")
     })
     
-    socket.on('chat message', (msg) => {
-        console.log('message: '+ msg);
-        io.emit('chat message', msg);
+    socket.on('chat m', (e) => {
+        console.log(`user:${e.username}, message: ${e.msg}`);
+        io.emit('chat m', e);
     });
 });
 
