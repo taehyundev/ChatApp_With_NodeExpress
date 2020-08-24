@@ -1,26 +1,60 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
     <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: rgb(201, 201, 201); padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form #m { border: 1; padding: 10px; width: 60%; margin-right: 0.5%; }
-      form #name { border: 1; padding: 10px;margin-right: 0.5%; }
-      form input{ border-style: solid; border-color: black; border-width: 1px;}
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      </style>
+      body{
+        background-color:gray
+      }
+      #position-set{
+        position: absolute;
+        left:50%;
+        top:100px;
+        transform: translate(-50%,0);
+      }
+      #mainform{
+        background-color:rgb(255, 255, 255);
+        height: 400px;
+        width: 350px;
+        box-shadow: 0px 0px 10px 0px black;
+        overflow:scroll;
+        overflow-x:hidden;
+      }
+      #sendform{
+        margin-top:10px;
+      }
+      #name{
+        width: 60px;
+      }
+      #m{
+        width: 220px;
+      }
+      h1{
+        text-align: center;
+      }
+      ul li{
+        list-style:none;
+        padding-left: 0px;
+        font-size :12px;
+      }
+    </style>
+    <title>Socket.IO chat</title>
   </head>
   <body>
-    <div id = "mainform">
-      <ul id="messages"></ul>
-      <form action="">
-        <input id="name" placeholder="name">
-        <input id="m" autocomplete="off" placeholder="contents" /><button>Send</button>
-      </form>
+    <div id = "position-set">
+      <h1>Chat App</h1>
+      <div id = "mainform">
+        <ul id="messages"></ul>
+      </div>
+      <div id = "sendform">
+        <form action="">
+          <input id="name" placeholder="name">
+          <input id="m" autocomplete="off" placeholder="contents" />
+          
+          <button>Send</button>
+        </form>
+      </div>
     </div>
+   
 
   </body>
   <script src="/socket.io/socket.io.js"></script>
@@ -50,9 +84,9 @@
       });
 
       socket.on('chat m',(e)=>{
-        console.log(`${e.username} - ${e.msg}`)
+        console.log(`${e.username} : ${e.msg}`)
         var li = document.createElement("li")
-        li.innerHTML = `${e.username} - ${e.msg}`
+        li.innerHTML = `"${e.username}"님의 말 : ${e.msg}`
         message.appendChild(li)
       });  
     })()
