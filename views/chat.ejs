@@ -48,9 +48,8 @@
       <div id = "sendform">
         <form action="">
           <input id="name" placeholder="name">
-          <input id="m" autocomplete="off" placeholder="contents" />
-          
-          <button>Send</button>
+          <input id="m" autocomplete="off" placeholder="contents" /> 
+          <button class="btn">Send</button>
         </form>
       </div>
     </div>
@@ -59,36 +58,76 @@
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
+
     var form =document.querySelector("form");
     var userName = document.getElementById("name");
     var chat_contents =document.getElementById('m');
     var message = document.getElementById("messages");
+    var btn = document.querySelector(".btn");
     var socket = io();
+    var enter = false;
+    var formchk = false;
     //var user = "";
     //var msg = "";
-    (function init() {
-      form.addEventListener("submit",(e)=>{
-        e.preventDefault();
-        if(userName.value === "") {
-          alert("사용자이름을 지정해주세요!")
-          return;
-        }
-        else{
-          if(chat_contents.value !== ""){
-            // prevents page reloading
-            socket.emit('chat m', {"username": userName.value, "msg" :chat_contents.value});
-            chat_contents.value ="";
-            return false;
-          }
-        }
-      });
+   // body.onload = ()=>{
+   //   alert(name)
+   // 
+   socket.on('chat m',(e)=>{
+          console.log(e)
+          
+          var li = document.createElement("li")
 
-      socket.on('chat m',(e)=>{
-        console.log(`${e.username} : ${e.msg}`)
-        var li = document.createElement("li")
-        li.innerHTML = `"${e.username}"님의 말 : ${e.msg}`
-        message.appendChild(li)
-      });  
+          if(formchk){
+            li.style.color = "blue"
+            formchk = false;
+          }else{
+            li.style.color = "black"
+            formchk = false;
+          }
+
+          if(e.enter === true){
+            console.log(`${e.username} : ${e.msg}`)
+            li.innerHTML = `"${e.username}"님의 말 : ${e.msg}`
+            message.appendChild(li)
+          }else{
+            console.log(`${e.username} : ${e.msg}`)
+            li.innerHTML =  e.msg
+            message.appendChild(li)
+            enter = true;
+            console.log(e.enter)
+          }
+  });
+
+   document.querySelector("body").onload = ()=>{
+      var name = prompt("너의 이름은?");
+      userName.value = name
+      if(name === null || name===""){
+        userName.value = "anon"
+        alert("닉네임을 재설정해주세요!")
+      }
+        chat_contents.value = `****"${userName.value}님"이 입장하였습니다.*****`
+      console.log(socket.id)
+      btn.click()
+   }
+
+
+    (function init() { 
+        form.addEventListener("submit",(e)=>{
+            formchk = true;
+            e.preventDefault();
+            if(userName.value === "") {
+              alert("사용자이름을 지정해주세요!")
+              return;
+            }
+            else{
+              if(chat_contents.value !== ""){
+                // prevents page reloading
+                socket.emit('chat m', {"enter":enter,"username": userName.value, "msg" :chat_contents.value});
+                chat_contents.value ="";
+                return false;
+              }
+          }
+      }); 
     })()
   </script>
 </html>
